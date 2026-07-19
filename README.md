@@ -28,16 +28,11 @@ This project is a Flight Booking System built using a microservices architecture
 - Spring Boot
 - Spring Data JPA
 - Hibernate
-- PostgreSQL
+- MySQL
 - ModelMapper
 - Lombok
 - Maven
 
-## Current Status
-
-- ✅ Flight Service completed
-- 🚧 Booking Service in progress
-- ⏳ Passenger Service planned
 
 ## Running the Flight Service
 
