@@ -16,11 +16,12 @@ This project is a Flight Booking System built using a microservices architecture
 ## Flight Service Features
 
 - Create, update, retrieve, and cancel flights.
-- Manage available seats when bookings are created or cancelled.
-- Prevent invalid flight data such as duplicate flight numbers or invalid departure and arrival times.
-- Use soft deletion by marking cancelled flights instead of removing them from the database.
+- Manage seat availability through reservation and release operations.
+- Validate flight data, including airport selection, flight times, and unique flight numbers.
+- Prevent reducing total seat capacity below the number of reserved seats.
+- Use soft deletion by marking flights as `CANCELLED`.
 - Separate entities from API models using DTOs and ModelMapper.
-- Use transactional service methods for data consistency.
+- Use transactional service methods to ensure data consistency.
 
 ## Tech Stack
 
