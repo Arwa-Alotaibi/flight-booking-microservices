@@ -1,4 +1,4 @@
-# Flight Booking Microservices
+✈️ Flight Booking Microservices Platform
 
 This project is a Flight Booking System built using a microservices architecture. Each service is responsible for a specific business domain, making the system easier to maintain and extend.
 
