@@ -4,13 +4,13 @@ This project is a Flight Booking System built using a microservices architecture
 
 ## Services
 
-- **Flight Service** (Completed)
+- **Flight Service** 
   - Manages flights, schedules, airports, seat availability, and flight status.
 
-- **Booking Service** (In Progress)
+- **Booking Service** 
   - Handles flight reservations and booking management.
 
-- **Passenger Service** (Planned)
+- **Passenger Service** 
   - Manages passenger information and user accounts.
 
 ## Flight Service Features
