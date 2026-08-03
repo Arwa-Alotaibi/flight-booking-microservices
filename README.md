@@ -22,12 +22,21 @@ This project is a Flight Booking System built using a microservices architecture
 - Use soft deletion by marking flights as `CANCELLED`.
 - Separate entities from API models using DTOs and ModelMapper.
 - Use transactional service methods to ensure data consistency.
+- Dynamic flight search using QueryDSL with multiple optional filters:
+  - Departure airport
+  - Arrival airport
+  - Flight status
+  - Departure date
+  - Maximum price
+- Use fetch join optimization to reduce unnecessary database queries when loading airport data.
+- Retrieve cheapest available flights using price-based sorting and limiting results.
 
 ## Tech Stack
 
 - Java
 - Spring Boot
 - Spring Data JPA
+- QueryDSL
 - Hibernate
 - MySQL
 - ModelMapper
