@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FlightRepository extends JpaRepository<Flight,Integer> {
+public interface FlightRepository extends JpaRepository<Flight,Integer> ,FlightRepositoryCustom {
     List<Flight> findByStatus(FlightStatus status);
 
     Optional<Flight>findByFlightNumber(String flightNumber);

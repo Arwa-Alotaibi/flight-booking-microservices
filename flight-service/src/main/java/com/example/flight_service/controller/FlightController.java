@@ -2,6 +2,7 @@ package com.example.flight_service.controller;
 
 import com.example.flight_service.dto.FlightRequestDto;
 import com.example.flight_service.dto.FlightResponseDto;
+import com.example.flight_service.dto.FlightSearchRequest;
 import com.example.flight_service.service.FlightService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,20 @@ public class FlightController {
         return ResponseEntity.ok(flightResponseDto);
     }
 
-    @PutMapping("/delete/{flightId}")
+    @PutMapping("/{flightId}/cancel")
     public ResponseEntity cancelFlight(@PathVariable Integer flightId){
         flightService.deleteFlight(flightId);
         return ResponseEntity.status(200).body("The flight has been cancelled successfully");
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity <List<FlightResponseDto>>  searchFlights(@RequestBody FlightSearchRequest flightSearchRequest){
+       List<FlightResponseDto> flightResponseDtoList = flightService.searchFlights(flightSearchRequest);
+        return ResponseEntity.ok(flightResponseDtoList);
+    }
+    @GetMapping("/cheapest")
+    public ResponseEntity<List<FlightResponseDto>> getCheapestFlight(){
+        List<FlightResponseDto> flightCheapest = flightService.getCheapestFlight();
+        return ResponseEntity.ok(flightCheapest);
     }
 }

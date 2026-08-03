@@ -7,25 +7,28 @@ import com.example.flight_service.dto.FlightUpdateDto;
 import com.example.flight_service.enums.FlightStatus;
 import com.example.flight_service.exception.ResourceIdNotFoundException;
 import com.example.flight_service.exception.HandleArgumentException;
+import com.example.flight_service.mapper.FlightMapper;
 import com.example.flight_service.models.Airport;
 import com.example.flight_service.models.Flight;
 import com.example.flight_service.repository.FlightRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightServiceImpl implements FlightService{
      private  final FlightRepository flightRepository;
      private  final ModelMapper modelMapper;
      private  final AirportService airportService;
+     private final FlightMapper flightMapper;
 
-    public FlightServiceImpl(FlightRepository flightRepository , ModelMapper modelMapper ,  AirportService airportService){
+    public FlightServiceImpl(FlightRepository flightRepository , ModelMapper modelMapper ,  AirportService airportService, FlightMapper flightMapper){
         this.flightRepository = flightRepository;
         this.modelMapper = modelMapper;
         this.airportService = airportService;
+        this.flightMapper = flightMapper;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class FlightServiceImpl implements FlightService{
         flight.setDepartureAirport(departureAirport);
         flight.setArrivalAirport(arrivalAirport);
         Flight flightSaved = flightRepository.save(flight);
-        return mapToFlightResponse(flightSaved);
+        return flightMapper.mapToFlightResponse(flightSaved);
     }
 
     @Override
@@ -65,7 +68,7 @@ public class FlightServiceImpl implements FlightService{
         flight.setPrice(flightUpdateDto.getPrice());
         flight.setTotalSeats(flightUpdateDto.getTotalSeats());
         flight.setAvailableSeats(updatedAvailableSeat);
-        return mapToFlightResponse(flight);
+        return flightMapper.mapToFlightResponse(flight);
     }
 
     @Override
@@ -94,8 +97,8 @@ public class FlightServiceImpl implements FlightService{
     @Transactional(readOnly = true)
     public FlightResponseDto getFlightByFlightNumber(String flightNumber) {
        Flight flight = flightRepository.findByFlightNumber(flightNumber).orElseThrow(() ->
-               new HandleArgumentException("the flight number is not exists"));
-        return  mapToFlightResponse(flight);
+               new ResourceIdNotFoundException("the flight number is not exists"));
+        return  flightMapper.mapToFlightResponse(flight);
     }
 
     @Override
@@ -103,32 +106,23 @@ public class FlightServiceImpl implements FlightService{
     public List<FlightResponseDto> getAllFlights() {
         List<Flight> flightList = flightRepository.findByStatusNot(FlightStatus.CANCELLED);
         return flightList.stream()
-                .map(this::mapToFlightResponse)
-                .toList();
-    }
+                .map(flightMapper ::mapToFlightResponse)
+                .collect(Collectors.toList());    }
 
-    public FlightResponseDto mapToFlightResponse(Flight flight){
-        FlightResponseDto flightResponseDto = modelMapper.map(flight,FlightResponseDto.class);
-        if(flight.getDepartureAirport()!=null){
-            flightResponseDto.setDepartureAirportCode(flight.getDepartureAirport().getAirportCode());
-        }
-        if(flight.getArrivalAirport()!=null){
-            flightResponseDto.setArrivalAirportCode(flight.getArrivalAirport().getAirportCode());
-        }
-        return flightResponseDto;
-    }
 
     @Override
     @Transactional(readOnly = true)
     public List<FlightResponseDto> getFlightsWithAvailableSeats() {
        return flightRepository.findByAvailableSeatsGreaterThanAndStatusNot(0,FlightStatus.CANCELLED).stream()
-                .map(this::mapToFlightResponse).toList();
+                .map(flightMapper ::mapToFlightResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FlightResponseDto> searchFlight(FlightSearchRequest flightSearchRequest) {
-        return List.of();
+    public List<FlightResponseDto> searchFlights(FlightSearchRequest flightSearchRequest) {
+       List<Flight> flightList =  flightRepository.searchFlights(flightSearchRequest);
+      return flightList.stream().map(flightMapper::mapToFlightResponse).toList();
     }
 
     @Override
@@ -137,6 +131,9 @@ public class FlightServiceImpl implements FlightService{
         Flight flight = flightRepository.findById(flightId).orElseThrow(() -> new ResourceIdNotFoundException("flight id not found"));
         if( flight.getAvailableSeats() == null || flight.getAvailableSeats() < seatCount){
             throw new HandleArgumentException("Not enough available seats on this flight");
+        }
+        if(flight.getStatus().equals(FlightStatus.CANCELLED)){
+            throw new HandleArgumentException("Cannot update cancelled flight");
         }
         flight.setAvailableSeats(flight.getAvailableSeats() - seatCount);
     }
@@ -150,6 +147,16 @@ public class FlightServiceImpl implements FlightService{
         if(availableSeat > flight.getTotalSeats()){
             throw new HandleArgumentException("the available seats cannot be greater than total seats");
         }
+        if(flight.getStatus().equals(FlightStatus.CANCELLED)){
+            throw new HandleArgumentException("Cannot update cancelled flight");
+        }
         flight.setAvailableSeats(availableSeat);
     }
+    @Override
+    @Transactional(readOnly = true)
+    public List<FlightResponseDto> getCheapestFlight(){
+        List<Flight> flightList = flightRepository.getCheapestFlight();
+        return flightList.stream().map(flightMapper::mapToFlightResponse).toList();
+    }
 }
+

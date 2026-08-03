@@ -15,9 +15,10 @@ public interface FlightService {
     FlightResponseDto getFlightByFlightNumber(String flightNumber);
     List<FlightResponseDto> getAllFlights();
     List<FlightResponseDto> getFlightsWithAvailableSeats();
-    List<FlightResponseDto> searchFlight(FlightSearchRequest flightSearchRequest);
+    List<FlightResponseDto> searchFlights(FlightSearchRequest flightSearchRequest);
     void updateAvailableSeats(Integer flightId, Integer seatsCount);
     void releaseSeats(Integer flightId , Integer seatsCount);
+    List<FlightResponseDto> getCheapestFlight();
 
 
 }
