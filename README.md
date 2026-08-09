@@ -1,6 +1,6 @@
 # Flight Booking Microservices ✈️
 
-A simple Flight Booking System built using a microservices architecture. The project is split into independent services, where each service is responsible for a specific business domain.
+A Flight Booking System developed with Spring Boot following a microservices architecture. The application is divided into Flight, Booking, and Passenger services, with each service responsible for a specific business domain and communicating through REST APIs.
 
 ## Services
 
