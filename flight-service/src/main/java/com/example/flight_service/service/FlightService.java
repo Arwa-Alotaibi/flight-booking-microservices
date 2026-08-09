@@ -20,5 +20,6 @@ public interface FlightService {
     void releaseSeats(Integer flightId , Integer seatsCount);
     List<FlightResponseDto> getCheapestFlight();
 
+    FlightResponseDto getFlightByFlightId(Integer flightId);
 
 }

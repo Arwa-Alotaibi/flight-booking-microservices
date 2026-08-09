@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/api/flights")
+@RequestMapping("api/v1/flights")
 public class FlightController {
 
     @Autowired FlightService flightService;
@@ -23,7 +22,7 @@ public class FlightController {
         FlightResponseDto flightResponseDto = flightService.addFlight(flightRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(flightResponseDto);
     }
-    @GetMapping("/flight/{flightNumber}")
+    @GetMapping("/number/{flightNumber}")
     public ResponseEntity<FlightResponseDto> getFlightByFlightNumber(@PathVariable String flightNumber ){
         FlightResponseDto flightResponseDto = flightService.getFlightByFlightNumber(flightNumber);
         return ResponseEntity.ok(flightResponseDto);
@@ -66,4 +65,10 @@ public class FlightController {
         List<FlightResponseDto> flightCheapest = flightService.getCheapestFlight();
         return ResponseEntity.ok(flightCheapest);
     }
+    @GetMapping("/id/{flightId}")
+    public ResponseEntity<FlightResponseDto> getFlightByFlightId(@PathVariable Integer flightId ){
+        FlightResponseDto flightResponseDto = flightService.getFlightByFlightId(flightId);
+        return ResponseEntity.ok(flightResponseDto);
+    }
+
 }

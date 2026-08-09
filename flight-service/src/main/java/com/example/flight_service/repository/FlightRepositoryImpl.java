@@ -1,6 +1,5 @@
 package com.example.flight_service.repository;
 
-import com.example.flight_service.dto.FlightResponseDto;
 import com.example.flight_service.dto.FlightSearchRequest;
 import com.example.flight_service.enums.FlightStatus;
 import com.example.flight_service.mapper.FlightMapper;
@@ -8,10 +7,6 @@ import com.example.flight_service.models.Flight;
 import com.example.flight_service.models.QFlight;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.util.ObjectUtils;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;

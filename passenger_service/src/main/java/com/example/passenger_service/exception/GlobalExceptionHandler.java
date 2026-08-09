@@ -1,8 +1,7 @@
-package com.example.flight_service.exception;
+package com.example.passenger_service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -12,13 +11,14 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(HandleArgumentException.class)
-    public ResponseEntity<Object> handleArgumentException(HandleArgumentException exception){
+
+    @ExceptionHandler(handleArgumentException.class)
+    public ResponseEntity<Object>handleArgumentException(handleArgumentException exception){
         return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(ResourceIdNotFoundException.class)
-    public ResponseEntity<Object>PassengerIdNotFoundException(ResourceIdNotFoundException exception){
+    @ExceptionHandler(PassengerIdNotFoundException.class)
+    public ResponseEntity<Object>PassengerIdNotFoundException(PassengerIdNotFoundException exception){
         return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
@@ -30,5 +30,4 @@ public class GlobalExceptionHandler {
         body.put("message", message);
         return new ResponseEntity<>(body, status);
     }
-
 }

@@ -158,5 +158,15 @@ public class FlightServiceImpl implements FlightService{
         List<Flight> flightList = flightRepository.getCheapestFlight();
         return flightList.stream().map(flightMapper::mapToFlightResponse).toList();
     }
+
+    @Override
+    @Transactional
+    public  FlightResponseDto getFlightByFlightId(Integer flightId){
+        Flight flight = flightRepository.findById(flightId).orElseThrow(() ->
+                new ResourceIdNotFoundException("the flight id is not exists"));
+        System.out.println(flight);
+        return flightMapper.mapToFlightResponse(flight);
+
+    }
 }
 
