@@ -77,7 +77,6 @@ This project is a Flight Booking System built using a microservices architecture
 - ModelMapper
 - Lombok
 - Maven
-- Docker (planned)
 
 ---
 
@@ -100,4 +99,3 @@ cd booking_service
 mvn spring-boot:run
 ```
 
-> Docker and Docker Compose support will be added to simplify running all services together.
