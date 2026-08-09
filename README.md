@@ -1,67 +1,32 @@
-# Flight Booking Microservices Platform ✈️
+# Flight Booking Microservices ✈️
 
-This project is a Flight Booking System built using a microservices architecture. Each service is responsible for a specific business domain, making the system easier to maintain and extend.
+A simple Flight Booking System built using a microservices architecture. The project is split into independent services, where each service is responsible for a specific business domain.
 
 ## Services
 
-- **Flight Service**
-  - Manages flights, schedules, airports, seat availability, and flight status.
-
-- **Booking Service**
-  - Handles flight reservations and booking management.
-
-- **Passenger Service**
-  - Manages passenger information and user accounts.
+- **Flight Service** – Manages flights, schedules, seat availability, and flight status.
+- **Booking Service** – Manages reservations and booking operations.
+- **Passenger Service** – Manages passenger information.
 
 ---
 
-## Flight Service Features
+## Features
 
+### Flight Service
 - Create, update, retrieve, and cancel flights.
-- Manage seat availability through reservation and release operations.
-- Validate flight data, including airport selection, flight times, and unique flight numbers.
-- Prevent reducing total seat capacity below the number of reserved seats.
-- Use soft deletion by marking flights as `CANCELLED`.
-- Separate entities from API models using DTOs and ModelMapper.
-- Use transactional service methods to ensure data consistency.
-- Dynamic flight search using QueryDSL with multiple optional filters:
-  - Departure airport
-  - Arrival airport
-  - Flight status
-  - Departure date
-  - Maximum price
-- Use fetch join optimization to reduce unnecessary database queries.
-- Retrieve cheapest available flights using price-based sorting.
+- Manage seat availability.
+- Search flights using QueryDSL.
+- Retrieve the cheapest available flights.
 
----
-
-## Booking Service Features
-
+### Booking Service
 - Create, update, retrieve, and cancel bookings.
-- Confirm booking payment and update booking status.
-- Validate passenger and flight existence through OpenFeign clients.
-- Prevent multiple pending bookings for the same passenger.
-- Automatically reserve and release flight seats.
-- Recalculate booking price when the flight or seat count changes.
-- Generate unique booking references.
-- Search bookings dynamically using QueryDSL with optional filters:
-  - Passenger ID
-  - Flight ID
-  - Booking reference
-  - Booking status
-  - Payment status
-  - Booking date range
-- Use DTOs, ModelMapper, and transactional service methods.
-- Centralized exception handling with custom business exceptions.
+- Confirm booking payments.
+- Reserve and release seats through OpenFeign.
+- Prevent duplicate pending bookings.
+- Search bookings using QueryDSL.
 
----
-
-## Passenger Service Features
-
+### Passenger Service
 - Create, update, retrieve, and delete passengers.
-- Validate passenger information.
-- Separate entities from API models using DTOs and ModelMapper.
-- Global exception handling.
 
 ---
 
@@ -75,14 +40,11 @@ This project is a Flight Booking System built using a microservices architecture
 - Hibernate
 - MySQL
 - ModelMapper
-- Lombok
 - Maven
 
 ---
 
-## Running the Project
-
-Each service runs independently.
+## Run Services
 
 ```bash
 cd passenger_service
@@ -98,4 +60,3 @@ mvn spring-boot:run
 cd booking_service
 mvn spring-boot:run
 ```
-
