@@ -65,10 +65,10 @@ mvn spring-boot:run
 ```bash
 cd booking_service
 mvn spring-boot:run
+```
 
 ```bash
 cd payment_service
-mvn spring-boot:run 
-
-
+mvn spring-boot:run
 ```
+
