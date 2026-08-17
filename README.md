@@ -1,52 +1,62 @@
-#  Flight Booking Microservices Platform ✈️
+# Flight Booking Microservices ✈️
 
-This project is a Flight Booking System built using a microservices architecture. Each service is responsible for a specific business domain, making the system easier to maintain and extend.
+A Flight Booking System developed with Spring Boot following a microservices architecture. The application is divided into Flight, Booking, and Passenger services, with each service responsible for a specific business domain and communicating through REST APIs.
 
 ## Services
 
-- **Flight Service** 
-  - Manages flights, schedules, airports, seat availability, and flight status.
+- **Flight Service** – Manages flights, schedules, seat availability, and flight status.
+- **Booking Service** – Manages reservations and booking operations.
+- **Passenger Service** – Manages passenger information.
 
-- **Booking Service** 
-  - Handles flight reservations and booking management.
+---
 
-- **Passenger Service** 
-  - Manages passenger information and user accounts.
+## Features
 
-## Flight Service Features
-
+### Flight Service
 - Create, update, retrieve, and cancel flights.
-- Manage seat availability through reservation and release operations.
-- Validate flight data, including airport selection, flight times, and unique flight numbers.
-- Prevent reducing total seat capacity below the number of reserved seats.
-- Use soft deletion by marking flights as `CANCELLED`.
-- Separate entities from API models using DTOs and ModelMapper.
-- Use transactional service methods to ensure data consistency.
-- Dynamic flight search using QueryDSL with multiple optional filters:
-  - Departure airport
-  - Arrival airport
-  - Flight status
-  - Departure date
-  - Maximum price
-- Use fetch join optimization to reduce unnecessary database queries when loading airport data.
-- Retrieve cheapest available flights using price-based sorting and limiting results.
+- Manage seat availability.
+- Search flights using QueryDSL.
+- Retrieve the cheapest available flights.
+
+### Booking Service
+- Create, update, retrieve, and cancel bookings.
+- Confirm booking payments.
+- Reserve and release seats through OpenFeign.
+- Prevent duplicate pending bookings.
+- Search bookings using QueryDSL.
+
+### Passenger Service
+- Create, update, retrieve, and delete passengers.
+
+---
 
 ## Tech Stack
 
-- Java
+- Java 21
 - Spring Boot
 - Spring Data JPA
+- Spring Cloud OpenFeign
 - QueryDSL
 - Hibernate
 - MySQL
 - ModelMapper
-- Lombok
 - Maven
 
+---
 
-## Running the Flight Service
+## Run Services
+
+```bash
+cd passenger_service
+mvn spring-boot:run
+```
 
 ```bash
 cd flight-service
+mvn spring-boot:run
+```
+
+```bash
+cd booking_service
 mvn spring-boot:run
 ```
