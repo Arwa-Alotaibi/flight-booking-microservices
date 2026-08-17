@@ -36,12 +36,15 @@ public class BookingServiceImpl implements BookingService{
         FlightResponseDto flightResponseDto = bookingValidationService.validateFlightId(bookingRequestDto.getFlightId());
         BigDecimal price = bookingValidationService.calculateBookingPrice(flightResponseDto.getPrice(),bookingRequestDto.getSeatCount());
         bookingValidationService.updateAvailableSeats(bookingRequestDto.getFlightId(),bookingRequestDto.getSeatCount());
+        // Create a new Booking entity.
+        // At this point, the entity is in the TRANSIENT state.
         Booking booking = bookingMapper.mapToEntity(bookingRequestDto);
         booking.setBookingReference("BK-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase());
         booking.setTotalPrice(price);
         booking.setBookingStatus(BookingStatus.PENDING);
         booking.setPaymentStatus(PaymentStatus.UNPAID);
-
+        // save() makes the transient entity managed
+        // and associates it with the Persistence Context.
         Booking bookingSave = bookingRepository.save(booking);
 
         return bookingMapper.mapToBooking(bookingSave);
@@ -51,6 +54,8 @@ public class BookingServiceImpl implements BookingService{
     @Override
     @Transactional
     public BookingResponseDto updateBooking(BookingRequestDto bookingRequestDto,String bookingReference) {
+        // Hibernate loads the entity from the database.
+        // The entity becomes MANAGED and is associated with the Persistence Context.
         Booking booking = bookingRepository.findByBookingReference(bookingReference).orElseThrow(()->
                 new ResourceNotFoundException("Booking reference does not exist."));
         bookingValidationService.validateUpdateBooking(bookingRequestDto,booking);
@@ -62,6 +67,7 @@ public class BookingServiceImpl implements BookingService{
             bookingValidationService.updateReleaseSeats(booking.getFlightId() , booking.getSeatCount());
             bookingValidationService.updateAvailableSeats(bookingRequestDto.getFlightId(), bookingRequestDto.getSeatCount());
             BigDecimal price = bookingValidationService.calculateBookingPrice(flightResponseDto.getPrice(),bookingRequestDto.getSeatCount());
+            // Hibernate tracks changes made to this managed entity.
             booking.setTotalPrice(price);
             if(isFlightChanged){
                 booking.setFlightId(bookingRequestDto.getFlightId());
@@ -70,12 +76,17 @@ public class BookingServiceImpl implements BookingService{
                 booking.setSeatCount(bookingRequestDto.getSeatCount());
             }
         }
+        // No save() is required because the entity is already managed.
+        // Dirty Checking detects the changes.
+        // At flush, Hibernate generates the UPDATE SQL.
+        // At commit, the transaction is committed.
         return bookingMapper.mapToBooking(booking);
     }
 
     @Override
     @Transactional
     public void cancelBooking(String bookingReference) {
+      // The Booking is loaded and becomes a MANAGED entity.
         Booking booking = bookingRepository.findByBookingReference(bookingReference).orElseThrow(
                 ()-> new ResourceNotFoundException("Booking reference does not exist."));
 
@@ -84,12 +95,16 @@ public class BookingServiceImpl implements BookingService{
         }
         bookingValidationService.updateReleaseSeats(booking.getFlightId() , booking.getSeatCount());
         booking.setBookingStatus(BookingStatus.CANCELLED);
+        // No save() is required.
+       // Dirty Checking detects the change.
+       // Flush → UPDATE SQL
+       // Commit → changes are committed to the database.
     }
 
 
     @Override
     public BookingResponseDto retrieveBooking(String bookingReference) {
-      Booking booking = bookingRepository.findByBookingReference(bookingReference)
+        Booking booking = bookingRepository.findByBookingReference(bookingReference)
               .orElseThrow(()-> new ResourceNotFoundException("Booking reference does not exist."));
         return bookingMapper.mapToBooking(booking);
     }
