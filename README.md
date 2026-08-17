@@ -7,6 +7,7 @@ A Flight Booking System developed with Spring Boot following a microservices arc
 - **Flight Service** – Manages flights, schedules, seat availability, and flight status.
 - **Booking Service** – Manages reservations and booking operations.
 - **Passenger Service** – Manages passenger information.
+- **Payment Service** – Processes payment requests and publishes payment success events.
 
 ---
 
@@ -27,6 +28,11 @@ A Flight Booking System developed with Spring Boot following a microservices arc
 
 ### Passenger Service
 - Create, update, retrieve, and delete passengers.
+
+### Payment Service
+Create payment requests for pending bookings.
+Process payments securely and validate status transitions.
+Publish PaymentSuccessEvent to Kafka upon successful transactions. 
 
 ---
 
@@ -59,4 +65,10 @@ mvn spring-boot:run
 ```bash
 cd booking_service
 mvn spring-boot:run
+
+```bash
+cd payment_service
+mvn spring-boot:run 
+
+
 ```
