@@ -12,7 +12,6 @@ public interface BookingRepositoryCustom {
     List<Booking> searchBooking(BookingSearchRequest bookingSearchRequest);
     Long searchCount(BookingSearchRequest bookingSearchRequest);
     Long countBookingsByStatus(BookingStatus bookingStatus);
-    Long countUnpaidBookings();
     boolean hasPendingBooking(Integer passengerId);
 
 }

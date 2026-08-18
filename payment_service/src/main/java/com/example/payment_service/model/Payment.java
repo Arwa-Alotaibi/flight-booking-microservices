@@ -24,10 +24,10 @@ import java.time.LocalDateTime;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long paymentId;
+    private Integer paymentId;
 
     @Column(nullable = false)
-    private Long bookingId;
+    private Integer bookingId;
 
     @Column(name="paymentReference", nullable = false,unique = true)
     private String paymentReference;

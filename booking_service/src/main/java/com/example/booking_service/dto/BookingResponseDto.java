@@ -18,7 +18,6 @@ public class BookingResponseDto {
     private BigDecimal totalPrice;
     private Integer seatCount;
     private BookingStatus bookingStatus;
-    private PaymentStatus paymentStatus;
     private LocalDateTime bookingDate;
     private Integer page = 0;
     private Integer size = 10;

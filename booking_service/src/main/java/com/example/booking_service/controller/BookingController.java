@@ -60,4 +60,10 @@ public class BookingController {
         return ResponseEntity.ok(bookingSearchResponse);
     }
 
+    @PutMapping("/confirm/{bookingReference}")
+    public ResponseEntity<BookingResponseDto>confirmBookingPayment(@PathVariable String bookingReference){
+        BookingResponseDto bookingResponseDto = bookingService.confirmBookingPayment( bookingReference);
+        return ResponseEntity.ok(bookingResponseDto);
+    }
+
 }

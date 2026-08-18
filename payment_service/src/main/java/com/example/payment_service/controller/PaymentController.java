@@ -23,14 +23,14 @@ public class PaymentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @PutMapping("/{paymentId}/process")
-    public ResponseEntity<PaymentResponseDto> processPayment(@PathVariable Long paymentId) {
-        PaymentResponseDto responseDto = paymentService.processPayment(paymentId);
+    @PutMapping("/{bookingId}/process")
+    public ResponseEntity<PaymentResponseDto> processPayment(@PathVariable Integer bookingId) {
+        PaymentResponseDto responseDto = paymentService.processPayment(bookingId);
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/booking/{bookingId}")
-    public ResponseEntity<PaymentResponseDto> getPaymentByBookingId(@PathVariable Long bookingId) {
+    public ResponseEntity<PaymentResponseDto> getPaymentByBookingId(@PathVariable Integer bookingId) {
         PaymentResponseDto responseDto = paymentService.getPaymentByBookingId(bookingId);
         return ResponseEntity.ok(responseDto);
     }

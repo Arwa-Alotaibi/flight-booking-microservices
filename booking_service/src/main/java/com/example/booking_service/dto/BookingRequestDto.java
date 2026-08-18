@@ -1,5 +1,6 @@
 package com.example.booking_service.dto;
 
+import com.example.booking_service.enums.PaymentMethod;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -24,5 +25,7 @@ public class BookingRequestDto {
     @Max(value = 9, message = "Seat count cannot exceed 9")
     private Integer seatCount;
 
+    @NotNull(message = "Payment method is required")
+    private PaymentMethod paymentMethod;
 
 }

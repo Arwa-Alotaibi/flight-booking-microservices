@@ -1,4 +1,5 @@
 package com.example.booking_service.service;
+import com.example.booking_service.client.PaymentClient;
 import com.example.booking_service.dto.*;
 import com.example.booking_service.enums.BookingStatus;
 import com.example.booking_service.enums.PaymentStatus;
@@ -19,14 +20,20 @@ public class BookingServiceImpl implements BookingService{
     private final BookingRepository bookingRepository;
     private final BookingValidationService bookingValidationService;
     private final BookingMapper bookingMapper;
+    private final PaymentClient paymentClient;
+
+
 
 
     public BookingServiceImpl(BookingRepository bookingRepository,
                               BookingValidationService bookingValidationService,
-                              BookingMapper bookingMapper) {
+                              BookingMapper bookingMapper,
+                              PaymentClient paymentClient
+                              ) {
         this.bookingRepository = bookingRepository;
         this.bookingValidationService = bookingValidationService;
         this.bookingMapper = bookingMapper;
+        this.paymentClient = paymentClient;
     }
     @Override
     @Transactional
@@ -42,10 +49,17 @@ public class BookingServiceImpl implements BookingService{
         booking.setBookingReference("BK-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase());
         booking.setTotalPrice(price);
         booking.setBookingStatus(BookingStatus.PENDING);
-        booking.setPaymentStatus(PaymentStatus.UNPAID);
         // save() makes the transient entity managed
         // and associates it with the Persistence Context.
         Booking bookingSave = bookingRepository.save(booking);
+
+        PaymentRequestDto paymentRequestDto = PaymentRequestDto.builder()
+                .bookingId(booking.getBookingId())
+                .amount(bookingSave.getTotalPrice())
+                .paymentMethod(bookingRequestDto.getPaymentMethod())
+                .build();
+
+        paymentClient.createPayment(paymentRequestDto);
 
         return bookingMapper.mapToBooking(bookingSave);
     }
@@ -92,6 +106,11 @@ public class BookingServiceImpl implements BookingService{
 
         if(booking.getBookingStatus().equals(BookingStatus.CANCELLED)){
             throw new HandleArgumentException("Booking is already cancelled.");
+        }
+
+        PaymentResponseDto paymentResponseDto =  paymentClient.getPaymentByBookingId(booking.getBookingId());
+        if(PaymentStatus.PAID.equals(paymentResponseDto.getPaymentStatus())){
+            throw new HandleArgumentException("sorry you cannot cancel booking is already paid.");
         }
         bookingValidationService.updateReleaseSeats(booking.getFlightId() , booking.getSeatCount());
         booking.setBookingStatus(BookingStatus.CANCELLED);
@@ -140,11 +159,10 @@ public class BookingServiceImpl implements BookingService{
         if(booking.getBookingStatus().equals(BookingStatus.CANCELLED)){
             throw new HandleArgumentException("Cannot confirm payment for a cancelled booking.");
         }
-        if(booking.getPaymentStatus().equals(PaymentStatus.PAID)){
-            throw new HandleArgumentException("Booking payment has already been confirmed.");
+        PaymentResponseDto paymentResponseDto = paymentClient.processPayment(booking.getBookingId());
+        if(PaymentStatus.PAID.equals(paymentResponseDto.getPaymentStatus())){
+            booking.setBookingStatus(BookingStatus.COMPLETED);
         }
-        booking.setBookingStatus(BookingStatus.COMPLETED);
-        booking.setPaymentStatus(PaymentStatus.PAID);
         return bookingMapper.mapToBooking(booking);
     }
 }

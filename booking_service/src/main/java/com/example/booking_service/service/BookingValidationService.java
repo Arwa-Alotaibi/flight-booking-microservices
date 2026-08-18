@@ -82,10 +82,6 @@ public class BookingValidationService {
         if (!booking.getPassengerId().equals(bookingRequestDto.getPassengerId())) {
             throw new HandleArgumentException("Passenger ID cannot be changed for an existing booking.");
         }
-
-        if (!booking.getPaymentStatus().equals(PaymentStatus.UNPAID)) {
-            throw new HandleArgumentException("Paid bookings cannot be updated.");
-        }
     }
 
     public void updateReleaseSeats(Integer flightId, Integer seatCount) {

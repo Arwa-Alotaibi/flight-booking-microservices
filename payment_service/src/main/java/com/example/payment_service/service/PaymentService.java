@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public interface PaymentService {
 
     PaymentResponseDto createPayment(PaymentRequestDto paymentRequestDto);
-    PaymentResponseDto getPaymentByBookingId(Long bookingId);
-    PaymentResponseDto processPayment(Long paymentId);
+    PaymentResponseDto getPaymentByBookingId(Integer bookingId);
+    PaymentResponseDto processPayment(Integer bookingId);
 
 }

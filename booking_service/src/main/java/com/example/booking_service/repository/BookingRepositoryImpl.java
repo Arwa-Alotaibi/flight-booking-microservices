@@ -35,9 +35,6 @@ public class BookingRepositoryImpl implements BookingRepositoryCustom{
         if(bookingSearchRequest.getBookingStatus()!=null){
             where.and(booking.bookingStatus.eq(bookingSearchRequest.getBookingStatus()));
         }
-        if(bookingSearchRequest.getPaymentStatus()!=null){
-            where.and(booking.paymentStatus.eq(bookingSearchRequest.getPaymentStatus()));
-        }
         if(bookingSearchRequest.getFromDate()!=null ){
             where.and(booking.bookingDate.goe(bookingSearchRequest.getFromDate().atStartOfDay()));
         }
@@ -84,15 +81,6 @@ public class BookingRepositoryImpl implements BookingRepositoryCustom{
 
     }
 
-
-    @Override
-    public Long countUnpaidBookings(){
-        QBooking booking = QBooking.booking;
-        return Optional.ofNullable(queryFactory.select(booking.count())
-                .from(booking)
-                .where(booking.paymentStatus.eq(PaymentStatus.UNPAID))
-                .fetchOne()).orElse(0L);
-    }
 
     @Override
     public boolean hasPendingBooking(Integer passengerId) {

@@ -18,7 +18,6 @@ public class BookingSearchRequest {
     private Integer flightId;
     private String bookingReference;
     private BookingStatus bookingStatus;
-    private PaymentStatus paymentStatus;
     private LocalDate fromDate;
     private LocalDate toDate;
     private Integer page = 0;

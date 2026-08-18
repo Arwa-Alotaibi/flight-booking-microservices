@@ -36,7 +36,7 @@ public class PaymentServiceImpl implements PaymentService{
         Payment payment = Payment.builder()
                 .bookingId(paymentRequestDto.getBookingId())
                 .paymentMethod(paymentRequestDto.getPaymentMethod())
-                .paymentStatus(PaymentStatus.PENDING)
+                .paymentStatus(PaymentStatus.UNPAID)
                 .paymentReference("PR"+UUID.randomUUID().toString().substring(0,6).toUpperCase())
                 .amount(paymentRequestDto.getAmount())
                 .build();
@@ -46,7 +46,7 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentResponseDto getPaymentByBookingId(Long bookingId) {
+    public PaymentResponseDto getPaymentByBookingId(Integer bookingId) {
         Payment payment = paymentRepository.findByBookingId(bookingId).orElseThrow(()->
                 new ResourceIdNotFoundException("booking id not found"));
         return modelMapper.map(payment,PaymentResponseDto.class);
@@ -55,16 +55,16 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     @Transactional
-    public PaymentResponseDto processPayment(Long paymentId) {
-        Payment payment = paymentRepository.findById(paymentId).orElseThrow(()->
-                 new ResourceIdNotFoundException("payment id not found"));
-        if(PaymentStatus.SUCCESS.equals(payment.getPaymentStatus())){
+    public PaymentResponseDto processPayment(Integer bookingId) {
+        Payment payment = paymentRepository.findByBookingId(bookingId).orElseThrow(()->
+                 new ResourceIdNotFoundException("booking id not found"));
+        if(PaymentStatus.PAID.equals(payment.getPaymentStatus())){
             throw new HandleArgumentException("the payment is already paid !");
         }
-        if(PaymentStatus.FAILED.equals(payment.getPaymentStatus())){
-            throw new HandleArgumentException("Cannot process a failed payment!");
+        if(PaymentStatus.REFUNDED.equals(payment.getPaymentStatus())){
+            throw new HandleArgumentException("Cannot process a refunded payment.");
         }
-        payment.setPaymentStatus(PaymentStatus.SUCCESS);
+        payment.setPaymentStatus(PaymentStatus.PAID);
         PaymentSuccessEvent paymentSuccessEvent =  PaymentSuccessEvent.builder()
                 .bookingId(payment.getBookingId())
                 .paymentId(payment.getPaymentId())

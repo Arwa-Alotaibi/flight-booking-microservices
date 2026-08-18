@@ -2,8 +2,10 @@ package com.example.booking_service.model;
 
 
 import com.example.booking_service.enums.BookingStatus;
+import com.example.booking_service.enums.PaymentMethod;
 import com.example.booking_service.enums.PaymentStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -44,10 +46,6 @@ public class Booking {
     @Column(name="bookingStatus",nullable = false)
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
-
-    @Column(name = "paymentStatus", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
 
     @Column(name = "bookingDate", nullable = false, updatable = false)
     @CreationTimestamp

@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentSuccessEvent {
-    private Long paymentId;
-    private Long bookingId;
+    private Integer paymentId;
+    private Integer bookingId;
     private BigDecimal amount;
     private String paymentReference;
 }
