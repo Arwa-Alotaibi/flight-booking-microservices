@@ -39,7 +39,8 @@ The application is split into multiple services that communicate through REST AP
 - MySQL
 - ModelMapper
 - Maven
-
+- Apache Kafka
+- Spring for Apache Kafka
 ---
 
 ## Run Services
