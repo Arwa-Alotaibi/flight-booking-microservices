@@ -54,7 +54,7 @@ public class BookingServiceImpl implements BookingService{
         Booking bookingSave = bookingRepository.save(booking);
 
         PaymentRequestDto paymentRequestDto = PaymentRequestDto.builder()
-                .bookingId(booking.getBookingId())
+                .bookingId(bookingSave.getBookingId())
                 .amount(bookingSave.getTotalPrice())
                 .paymentMethod(bookingRequestDto.getPaymentMethod())
                 .build();
@@ -104,7 +104,10 @@ public class BookingServiceImpl implements BookingService{
         Booking booking = bookingRepository.findByBookingReference(bookingReference).orElseThrow(
                 ()-> new ResourceNotFoundException("Booking reference does not exist."));
 
-        if(booking.getBookingStatus().equals(BookingStatus.CANCELLED)){
+        if(BookingStatus.COMPLETED.equals(booking.getBookingStatus())){
+            throw new HandleArgumentException("Cannot cancel a completed booking.");
+        }
+        if(BookingStatus.CANCELLED.equals(booking.getBookingStatus())){
             throw new HandleArgumentException("Booking is already cancelled.");
         }
 
@@ -159,10 +162,16 @@ public class BookingServiceImpl implements BookingService{
         if(booking.getBookingStatus().equals(BookingStatus.CANCELLED)){
             throw new HandleArgumentException("Cannot confirm payment for a cancelled booking.");
         }
+        if(booking.getBookingStatus().equals(BookingStatus.COMPLETED)){
+            throw new HandleArgumentException("Booking payment is already confirmed.");
+        }
+        System.out.println(booking.getBookingStatus());
         PaymentResponseDto paymentResponseDto = paymentClient.processPayment(booking.getBookingId());
         if(PaymentStatus.PAID.equals(paymentResponseDto.getPaymentStatus())){
             booking.setBookingStatus(BookingStatus.COMPLETED);
         }
+        System.out.println(booking.getBookingStatus());
+
         return bookingMapper.mapToBooking(booking);
     }
 }

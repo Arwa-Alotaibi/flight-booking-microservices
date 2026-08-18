@@ -5,6 +5,7 @@ import com.example.booking_service.client.FlightClient;
 import com.example.booking_service.client.PassengerClient;
 import com.example.booking_service.dto.BookingRequestDto;
 import com.example.booking_service.dto.FlightResponseDto;
+import com.example.booking_service.dto.PaymentResponseDto;
 import com.example.booking_service.enums.BookingStatus;
 import com.example.booking_service.enums.PaymentStatus;
 import com.example.booking_service.exception.HandleArgumentException;
