@@ -64,3 +64,7 @@ cd payment_service
 mvn spring-boot:run
 ```
 
+```bash
+cd notification-service
+mvn spring-boot:run
+```
