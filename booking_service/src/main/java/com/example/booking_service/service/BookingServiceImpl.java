@@ -165,13 +165,10 @@ public class BookingServiceImpl implements BookingService{
         if(booking.getBookingStatus().equals(BookingStatus.COMPLETED)){
             throw new HandleArgumentException("Booking payment is already confirmed.");
         }
-        System.out.println(booking.getBookingStatus());
         PaymentResponseDto paymentResponseDto = paymentClient.processPayment(booking.getBookingId());
         if(PaymentStatus.PAID.equals(paymentResponseDto.getPaymentStatus())){
             booking.setBookingStatus(BookingStatus.COMPLETED);
         }
-        System.out.println(booking.getBookingStatus());
-
         return bookingMapper.mapToBooking(booking);
     }
 }
