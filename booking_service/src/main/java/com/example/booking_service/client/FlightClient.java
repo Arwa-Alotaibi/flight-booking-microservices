@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@FeignClient(name="flight-service",url="http://localhost:8083")
+@FeignClient(name="flight-service")
 public interface FlightClient {
     @GetMapping("/api/v1/flights/id/{flightId}")
     FlightResponseDto getFlightByFlightId(@PathVariable Integer flightId);

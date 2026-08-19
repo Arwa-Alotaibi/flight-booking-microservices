@@ -16,6 +16,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleArgumentException(HandleArgumentException exception){
         return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException exception){
+        return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
     public ResponseEntity<Object> buildResponse(HttpStatus status , String message){
         Map<String,Object> body= new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
