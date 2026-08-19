@@ -27,7 +27,13 @@ The application is split into multiple services that communicate through REST AP
   `Notification Service` consumes the event and handles the payment notification.
 
 ---
+## Service Discovery
 
+The services are registered with **Eureka Server** and discovered using their service names.
+
+The API Gateway uses Eureka to route requests to the appropriate service.
+
+---
 ## Tech Stack
 
 - Java 
