@@ -7,8 +7,8 @@ The application is split into multiple services that communicate through REST AP
 ---
 
 ## Services
-- **Eureka Server:** Used for service discovery and service registration.
-- **API Gateway:** Routes requests to the different services.
+* **Eureka Server:** Used for service discovery and service registration.
+* **API Gateway:** Routes requests to the different services.
 * **Flight Service:** Handles flight creation, scheduling, seat availability, and flight searching using QueryDSL.
 * **Passenger Service:** Manages passenger profiles and basic information.
 * **Booking Service:** Manages flight reservations, calculates booking prices, manages seat availability, and handles booking status.
