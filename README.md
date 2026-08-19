@@ -7,7 +7,8 @@ The application is split into multiple services that communicate through REST AP
 ---
 
 ## Services
-
+- **Eureka Server:** Used for service discovery and service registration.
+- **API Gateway:** Routes requests to the different services.
 * **Flight Service:** Handles flight creation, scheduling, seat availability, and flight searching using QueryDSL.
 * **Passenger Service:** Manages passenger profiles and basic information.
 * **Booking Service:** Manages flight reservations, calculates booking prices, manages seat availability, and handles booking status.
@@ -49,29 +50,3 @@ The API Gateway uses Eureka to route requests to the appropriate service.
 - Spring for Apache Kafka
 ---
 
-## Run Services
-
-```bash
-cd passenger_service
-mvn spring-boot:run
-```
-
-```bash
-cd flight-service
-mvn spring-boot:run
-```
-
-```bash
-cd booking_service
-mvn spring-boot:run
-```
-
-```bash
-cd payment_service
-mvn spring-boot:run
-```
-
-```bash
-cd notification-service
-mvn spring-boot:run
-```
