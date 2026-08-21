@@ -1,71 +1,48 @@
 # Flight Booking Microservices ✈️
 
-A flight booking system built using Java , Spring Boot, and Microservices architecture.
+A flight booking system built with Java, Spring Boot, and Microservices architecture.
 
-The application is split into multiple services that communicate through REST APIs and asynchronous events.
-
----
+The project is divided into multiple services, with each service handling a specific part of the booking process. The services communicate using REST APIs and asynchronous events.
 
 ## Services
 
-* **Flight Service:** Handles flight creation, scheduling, seat availability, and flight searching using QueryDSL.
-* **Passenger Service:** Manages passenger profiles and basic information.
-* **Booking Service:** Manages flight reservations, calculates booking prices, manages seat availability, and handles booking status.
-* **Payment Service:** Creates and processes payments and manages payment status (`UNPAID` / `PAID` / `REFUNDED`).
-* **Notification Service:** Consumes payment success events from Kafka.
+* **Eureka Server:** Used for service discovery and service registration.
+* **API Gateway:** Routes requests to the different services.
+* **Flight Service:** Handles flight creation, updates, cancellation, flight search, cheapest flights, and seat availability.
+* **Passenger Service:** Handles creating, retrieving, updating, and deleting passengers.
+* **Booking Service:** Handles booking creation, updates, cancellation, booking search, price calculation, seat availability, and payment processing.
+* **Payment Service:** Handles payment creation, retrieval, and processing. It also publishes a payment success event to Kafka after a successful payment.
+* **Notification Service:** Listens to the `payment-success` Kafka topic and receives payment success events.
 
----
+## Communication Between Services
 
-## Inter-Service Communication
+### Synchronous – REST / OpenFeign
+Booking Service communicates with Flight, Passenger, and Payment services using Spring Cloud OpenFeign.
 
-* **Synchronous (REST / OpenFeign):**  
-  `Booking Service` communicates with `Flight`, `Passenger`, and `Payment` services using **Spring Cloud OpenFeign** for validations and requests.
+### Asynchronous – Apache Kafka
+After a payment is successfully processed, Payment Service publishes a `PaymentSuccessEvent` to the `payment-success` Kafka topic. Notification Service consumes this event and reads the payment details.
 
-* **Asynchronous (Apache Kafka):**  
-  When a payment is successfully processed in `Payment Service`, a `PaymentSuccessEvent` is published to the `payment-success` Kafka topic.
+## Testing
 
-  `Notification Service` consumes the event and handles the payment notification.
+Unit tests were added for:
+* Flight Service
+* Booking Service
+* Payment Service
 
----
+Testing was done using **JUnit** and **Mockito**.
 
 ## Tech Stack
 
-- Java 
-- Spring Boot
-- Spring Data JPA
-- Spring Cloud OpenFeign
-- QueryDSL
-- Hibernate
-- MySQL
-- ModelMapper
-- Maven
-- Apache Kafka
-- Spring for Apache Kafka
----
-
-## Run Services
-
-```bash
-cd passenger_service
-mvn spring-boot:run
-```
-
-```bash
-cd flight-service
-mvn spring-boot:run
-```
-
-```bash
-cd booking_service
-mvn spring-boot:run
-```
-
-```bash
-cd payment_service
-mvn spring-boot:run
-```
-
-```bash
-cd notification-service
-mvn spring-boot:run
-```
+* Java
+* Spring Boot
+* Spring Data JPA
+* Spring Cloud OpenFeign
+* QueryDSL
+* Hibernate
+* MySQL
+* ModelMapper
+* Maven
+* Apache Kafka
+* Spring for Apache Kafka
+* JUnit
+* Mockito
