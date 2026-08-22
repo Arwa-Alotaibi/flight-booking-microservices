@@ -14,6 +14,11 @@ The project is divided into multiple services, with each service handling a spec
 * **Payment Service:** Handles payment creation, retrieval, and processing. It also publishes a payment success event to Kafka after a successful payment.
 * **Notification Service:** Listens to the `payment-success` Kafka topic and receives payment success events.
 
+## 📮 API Documentation
+
+Explore the interactive API documentation and complete endpoint collection via Postman:
+[View Postman Documentation](https://documenter.getpostman.com/view/25472571/2sBYArVtKi)
+
 ## Communication Between Services
 
 ### Synchronous – REST / OpenFeign
