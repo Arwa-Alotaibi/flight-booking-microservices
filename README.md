@@ -1,6 +1,6 @@
 # Flight Booking Microservices ✈️
 
-A flight booking system built with Java, Spring Boot, and Microservices architecture.
+A flight booking system built with Java, Spring Boot.
 
 The project is divided into multiple services, with each service handling a specific part of the booking process. The services communicate using REST APIs and asynchronous events.
 
