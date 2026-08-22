@@ -18,7 +18,7 @@ The project is divided into multiple services, with each service handling a spec
 The project includes a Postman collection containing the available API endpoints.
 Requests can be sent through the API Gateway.
 Postman Documentation:
-[View Postman Documentation](https://documenter.getpostman.com/view/25472571/2sBYArVtKi)
+[View Postman Documentation](https://documenter.getpostman.com/view/25472571/2sBYArVtKi#649d7117-a8ec-4fe2-9c52-9da90524cf19)
 
 ## Communication Between Services
 
